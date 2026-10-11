@@ -1,205 +1,472 @@
-# Naav Bins
+# ♻️ SmartBin — AI-Powered Smart Waste Management & Rewards Platform
 
-Naav Bins is an AI-powered waste management and reward platform designed to make recycling more engaging, efficient, and community-driven. The app lets users scan waste items, classify them using machine learning, identify the correct bin, and earn rewards in the form of wallet credits and eco points.
+SmartBin is a full-stack smart waste management platform that incentivizes responsible recycling through artificial intelligence and a real-time reward system. The platform addresses one of urban waste management's core challenges — the lack of motivation for citizens to segregate waste at the point of disposal.
 
-## Overview
+The workflow is straightforward. A user locates a nearby smart bin through an in-app map, scans the QR code attached to the bin, and holds their waste item in front of the camera. A machine learning model trained on Teachable Machine instantly classifies the waste into one of six categories — Plastic, Metal, Paper and Cardboard, Organic, Glass, or Other Trash — and credits the user's wallet with a monetary reward along with eco-points. These points and funds can be redeemed for real-world benefits such as transport passes and entertainment vouchers.
 
-The platform combines:
-- AI-based waste recognition
-- interactive smart-bin guidance
-- digital wallet and redemption system
-- user dashboard and leaderboard
-- admin monitoring for operational insights
+The platform also includes a personal dashboard with earnings charts and activity logs, a leaderboard to encourage community participation, and an admin portal for monitoring platform-wide impact metrics such as total funds distributed and estimated CO₂ savings.
 
-This project is built as a full-stack web application using a React frontend and a Node.js/Express backend, with Firebase and Supabase powering authentication and app data.
+---
 
-## Key Features
+## 🌐 Live Application
 
-### AI Waste Recognition
-- Real-time waste classification using TensorFlow.js and Teachable Machine
-- Supports categories such as Plastic and Organic
-- Helps users decide the correct bin before disposal
+| Component | Link |
+|---|---|
+| **SmartBin Frontend** | https://smart-bin-red.vercel.app |
+| **Backend API** | https://sm-fe78a1f00f944cae95802987df054d40.ecs.ap-south-1.on.aws |
+| **GitHub Repository** | https://github.com/ayush8771/smart-bin |
 
-### Smart Bin Experience
-- QR-based presence validation before scan submission
-- Waste type detection and guided segregation
-- Bin suggestions and user-friendly disposal flow
+---
 
-### Rewards and Wallet System
-- Earn rewards for recycling activity
-- Example reward logic:
-  - Plastic: ₹10 + 50 Eco Points
-  - Organic: ₹7 + 20 Eco Points
-- Track wallet balance, redemption history, and eco-point activity
-- Redeem points or wallet balance for rewards and vouchers
+## ✨ Key Features
 
-### Dashboard and Analytics
-- Personal dashboard with activity logs
-- Waste distribution insights
-- Earnings trend charts using Recharts
-- Leaderboard for eco-conscious users
+### 🤖 1. AI-Powered Waste Classification
 
-### Admin Console
-- Overview of total users, distributed funds, and impact metrics
-- User management and searchable profile lists
-- Monitoring of wallet status and user activity
+SmartBin uses machine learning to help users identify and segregate waste correctly.
 
-## Tech Stack
+- Image classification using TensorFlow.js and Teachable Machine.
+- Camera-based waste recognition.
+- Supports six waste categories:
+  - 🧴 Plastic
+  - 🔩 Metal
+  - 📦 Paper and Cardboard
+  - 🌿 Organic
+  - 🫙 Glass
+  - 🗑️ Other Trash
+- Provides a technology-driven approach to waste segregation.
+
+### 🗺️ 2. Smart-Bin Location Discovery
+
+Users can discover nearby smart bins through an interactive map.
+
+- Displays smart-bin locations geographically.
+- Retrieves bin information from the backend API.
+- Shows bin names, coordinates, and status information.
+- Helps users identify convenient waste disposal locations.
+
+### 📷 3. QR-Based Waste Disposal Workflow
+
+The platform connects waste recognition with the smart-bin experience.
+
+1. Locate a nearby smart bin using the application map.
+2. Scan the QR code attached to the selected bin.
+3. Capture the waste item using the camera.
+4. Allow the machine learning model to classify the waste.
+5. Submit the waste-related activity through the application.
+6. Receive the applicable wallet reward and eco-points.
+
+### 🎁 4. Digital Wallet and Rewards
+
+SmartBin encourages sustainable behaviour through a digital incentive system.
+
+- Monetary wallet credits for eligible recycling activities.
+- Eco-points accumulation.
+- Wallet balance tracking.
+- Reward redemption functionality.
+- Redemption history and activity tracking.
+- Potential real-world benefits, including transport passes and entertainment vouchers.
+
+### 📊 5. Personalized User Dashboard
+
+The dashboard provides users with an overview of their recycling activities and rewards.
+
+Features include:
+
+- Wallet balance.
+- Accumulated eco-points.
+- CO₂ savings information.
+- Earnings trend charts.
+- Waste distribution analytics.
+- Recycling activity logs.
+- Quick access to the smart-bin map.
+- Navigation to the community leaderboard.
+
+### 🏆 6. Community Leaderboard
+
+The leaderboard encourages participation and friendly competition.
+
+- Displays user rankings.
+- Highlights recycling contributions.
+- Encourages sustainable habits.
+- Promotes community participation in responsible waste management.
+
+### 🛡️ 7. Admin Portal
+
+The administration interface provides tools for monitoring platform activity.
+
+- User management.
+- User information and account monitoring.
+- Platform activity insights.
+- Total funds distributed.
+- Environmental impact metrics.
+- Estimated CO₂ savings.
+
+---
+
+## 🛠️ Technology Stack
 
 ### Frontend
-- React + Vite
-- Tailwind CSS
-- Recharts
-- Lucide React
-- React Webcam
-- Leaflet + React Leaflet
-- Axios
+
+| Technology | Purpose |
+|---|---|
+| React | Component-based user interface |
+| Vite | Development server and production build |
+| Tailwind CSS | Styling and responsive layouts |
+| React Router | Client-side navigation |
+| Axios | HTTP requests to backend APIs |
+| Lucide React | Icons |
+| Recharts | Dashboard charts and analytics |
+| React Webcam | Camera access |
+| TensorFlow.js | Browser-based machine learning |
+| Teachable Machine | Waste image classification |
+| Leaflet | Interactive maps |
+| React Leaflet | React integration for maps |
 
 ### Backend
-- Node.js
-- Express.js
 
-### Authentication and Data
-- Firebase Admin SDK
-- Firebase Firestore
-- Supabase
-- JWT and bcryptjs
+| Technology | Purpose |
+|---|---|
+| Node.js | JavaScript runtime |
+| Express.js | REST API and server |
+| JSON Web Tokens (JWT) | Authentication tokens |
+| bcryptjs | Password hashing |
+| Firebase Admin SDK | Server-side Firebase integration |
+| Supabase | Database and application data access |
 
-### AI / ML
-- TensorFlow.js
-- Teachable Machine
+### Cloud and Deployment
 
-## Project Structure
+| Technology | Purpose |
+|---|---|
+| GitHub | Source code management |
+| GitHub Actions | Backend build automation |
+| Amazon ECR | Container image registry |
+| Amazon ECS | Backend container hosting |
+| Vercel | Frontend hosting and deployment |
+| Firebase | Application authentication-related integration |
+| Supabase | Database services |
+
+---
+
+## 🏗️ System Architecture
+
+SmartBin follows a client-server architecture in which the frontend communicates with the backend through HTTP REST API requests.
 
 ```text
-naav-bins/
+                      ┌─────────────────────────┐
+                      │      SmartBin User      │
+                      └────────────┬────────────┘
+                                   │
+                                   ▼
+                      ┌─────────────────────────┐
+                      │      React + Vite       │
+                      │   Frontend on Vercel    │
+                      └────────────┬────────────┘
+                                   │
+                             HTTPS Requests
+                                   │
+                                   ▼
+                      ┌─────────────────────────┐
+                      │    Node.js + Express    │
+                      │   Backend on AWS ECS    │
+                      └────────────┬────────────┘
+                                   │
+                         ┌─────────┴─────────┐
+                         │                   │
+                         ▼                   ▼
+                ┌────────────────┐  ┌────────────────┐
+                │ Firebase Admin │  │    Supabase    │
+                │   Integration  │  │    Database    │
+                └────────────────┘  └────────────────┘
+
+
+                 Browser-Based AI Processing
+                      ┌──────────────────────┐
+                      │     TensorFlow.js    │
+                      │  Teachable Machine   │
+                      │   Image Classifier   │
+                      └──────────────────────┘
+```
+
+### Application Workflow
+
+1. The user accesses the SmartBin frontend.
+2. The user registers or logs in.
+3. The frontend communicates with the Express backend through REST APIs.
+4. The user explores nearby smart-bin locations.
+5. The user scans a bin's QR code and captures a waste image.
+6. The machine learning model classifies the waste.
+7. The application submits the relevant waste activity to the backend.
+8. The platform processes the activity and applicable rewards.
+9. The dashboard displays wallet information, eco-points, activity history, and impact metrics.
+
+---
+
+## 📁 Project Structure
+
+```text
+smart-bin/
+│
 ├── client/
 │   └── smartbin/
 │       ├── public/
 │       ├── src/
+│       │   ├── api.js
+│       │   ├── admin.jsx
+│       │   ├── auth.jsx
+│       │   ├── dashboard.jsx
+│       │   ├── leaderboard.jsx
+│       │   ├── scanner.jsx
+│       │   └── smartbinmaps.jsx
 │       ├── index.html
 │       ├── package.json
 │       ├── vite.config.js
-│       ├── tailwind.config.js
-│       └── postcss.config.js
+│       └── ...
+│
 ├── server/
 │   ├── index.js
-│   ├── package.json
-│   └── serviceAccountKey.json
-├── package.json
-├── README.md
-└── .gitignore
+│   ├── Dockerfile
+│   └── package.json
+│
+├── .github/
+│   └── workflows/
+│       └── deploy-backend.yml
+│
+├── .gitignore
+└── README.md
 ```
 
-## Prerequisites
+*Note: This structure highlights the primary application files. Additional source files, configuration files, and assets may also be present.*
 
-Before running the project locally, make sure you have:
-- Node.js 18 or newer
-- npm
-- Firebase project setup
-- Supabase project setup
-- A Teachable Machine model URL (for AI classification)
+---
 
-## Setup Instructions
+## ⚙️ Getting Started
 
-### 1) Install backend dependencies
+Follow these instructions to run SmartBin locally.
+
+### Prerequisites
+
+Make sure you have the following:
+
+- Node.js and npm installed.
+- Git installed.
+- A Firebase project with the required server-side configuration.
+- A Supabase project with the required database configuration.
+- A configured Teachable Machine model for waste classification.
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/ayush8771/smart-bin.git
+cd smart-bin
+```
+
+### 2. Configure the Backend
+
+Navigate to the backend directory:
 
 ```bash
 cd server
 npm install
 ```
 
-### 2) Configure Firebase and Supabase
+Configure the required environment variables for your local backend.
 
-The backend expects Firebase credentials and Supabase configuration.
+Example configuration:
 
-#### Option A: Use Firebase service account JSON
-Create a file named `server/serviceAccountKey.json` with your Firebase Admin SDK credentials.
-
-#### Option B: Use environment variable
-Set the following environment variable in your shell or `.env` file:
-
-```bash
-FIREBASE_CREDS='{"type":"service_account", ... }'
-SUPABASE_URL="https://your-project.supabase.co"
-SUPABASE_ANON_KEY="your-supabase-anon-key"
+```env
 PORT=5000
+JWT_SECRET=your-strong-random-secret
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-supabase-key
+FIREBASE_CREDS=your-firebase-service-account-json
 ```
 
-### 3) Start the backend
+Replace the example values with your actual configuration.
+
+**Important:**
+
+- `JWT_SECRET` must contain a strong, randomly generated secret.
+- `SUPABASE_URL` must point to your Supabase project.
+- `SUPABASE_ANON_KEY` must contain the appropriate Supabase key.
+- `FIREBASE_CREDS` must contain valid Firebase service-account JSON in the format expected by the backend.
+
+Use your project's existing configuration and required environment-variable names when setting up the backend.
+
+Never commit actual secrets or service-account credentials to GitHub.
+
+### 3. Start the Backend
+
+From the `server` directory, run:
 
 ```bash
-cd server
 node index.js
 ```
 
-The server should start successfully and connect to Firebase and Supabase.
+The backend should start using the configured port and initialize the required services.
 
-### 4) Install frontend dependencies
+### 4. Configure the Frontend
+
+Open a separate terminal and navigate to the frontend directory:
 
 ```bash
 cd client/smartbin
 npm install
 ```
 
-### 5) Start the frontend
+Create a `.env` file inside `client/smartbin/`:
+
+```env
+VITE_API_BASE_URL=http://localhost:5000
+```
+
+This configures the local frontend to communicate with the local backend.
+
+For production, the frontend uses the configured AWS backend URL.
+
+### 5. Start the Frontend
+
+From the `client/smartbin` directory, run:
 
 ```bash
-cd client/smartbin
 npm run dev
 ```
 
-Then open:
+Vite will display the local development URL. By default, it is usually:
 
 ```text
 http://localhost:5173
 ```
 
-## AI Model Configuration
+Open the displayed URL in your browser to access the application.
 
-The app uses a Teachable Machine model URL in the frontend scanner logic.
+### 6. Build the Frontend for Production
 
-Open the scanner component and replace the model URL with your own imported model:
+To create an optimized production build, run:
 
-```js
-const URL = "https://teachablemachine.withgoogle.com/models/YOUR_MODEL_ID/";
+```bash
+npm run build
 ```
 
-This model should classify the waste into labels such as:
-- Plastic
-- Organic
+The generated production files are placed in the `dist` directory.
 
-## Admin Access
+---
 
-To access the admin dashboard:
-1. Register a new user in the app
-2. Open your Firebase Firestore database
-3. Go to the `users` collection
-4. Update the user role from `user` to `admin`
-5. Log out and log back in
+## 🔌 Backend API Reference
 
-## Usage Flow
+The backend exposes REST API endpoints for the application's core functionality.
 
-1. User registers or logs in
-2. User scans waste via the app
-3. AI identifies the waste category
-4. System directs the user to the correct bin
-5. User earns wallet credit and eco points
-6. Wallet and redemption history are updated
-7. Admin monitors user activity and platform stats
+| Endpoint | Method | Description |
+|---|---|---|
+| `/api/register` | POST | Register a user |
+| `/api/login` | POST | Authenticate a user |
+| `/api/dashboard` | GET | Retrieve dashboard information |
+| `/api/add-waste` | POST | Submit waste-related activity |
+| `/api/redeem` | POST | Redeem rewards |
+| `/api/bins` | GET | Retrieve smart-bin information |
+| `/api/leaderboard` | GET | Retrieve leaderboard information |
+| `/api/admin/users` | GET | Retrieve user information for administration |
 
-## Future Improvements
+Protected endpoints may require an authentication token in the `x-access-token` request header.
 
-- Hardware integration for automated bin lid opening
-- Expanded waste categories and classification accuracy
-- Leaderboard and gamified recycling challenges
-- Stripe or Razorpay integration for payout processing
-- Location-based smart bin analytics
+### Example: Retrieve Smart-Bin Data
 
-## License
+**Request**
 
-This project is currently distributed without a formal license declaration.
+```http
+GET /api/bins
+```
 
-## Notes
+**Production endpoint**
 
-This repository is a prototype / demo application focused on waste segregation, digital rewards, and environmental awareness. It is suitable for hackathon, startup MVP, and campus project use cases.
+```text
+https://sm-fe78a1f00f944cae95802987df054d40.ecs.ap-south-1.on.aws/api/bins
+```
+
+The endpoint returns smart-bin information in JSON format.
+
+---
+
+## 🚀 Deployment
+
+SmartBin's frontend and backend are deployed independently.
+
+### Frontend Deployment — Vercel
+
+The React application is hosted on Vercel.
+
+**Production URL:**
+
+https://smart-bin-red.vercel.app
+
+The frontend uses the `VITE_API_BASE_URL` environment variable to identify the backend API.
+
+### Backend Deployment — Amazon ECS
+
+The Node.js and Express backend is hosted on Amazon ECS.
+
+**Backend URL:**
+
+https://sm-fe78a1f00f944cae95802987df054d40.ecs.ap-south-1.on.aws
+
+The backend is containerized using Docker, and the image is stored in Amazon ECR.
+
+### Continuous Integration
+
+GitHub Actions automates the backend build-and-push workflow.
+
+The workflow builds the backend Docker image and publishes it to Amazon ECR. Deployment to ECS is managed separately unless an automated ECS deployment step is configured.
+
+### Environment Configuration
+
+Production configuration and credentials are managed through the hosting platform's environment variables and cloud secrets.
+
+Never expose backend credentials in frontend code or commit them to the repository.
+
+---
+
+## 🔒 Security Considerations
+
+- Use a strong, randomly generated JWT secret.
+- Hash user passwords before storing them.
+- Keep Firebase service-account credentials private.
+- Store backend secrets in environment variables or a secrets manager.
+- Never expose server-side credentials through Vite environment variables.
+- Restrict administrative functionality to authorized users.
+- Validate incoming API requests.
+- Handle errors without exposing sensitive implementation details.
+- Configure CORS according to the deployment environment's requirements.
+- Keep dependencies updated and review security advisories.
+
+---
+
+## 🔮 Future Enhancements
+
+Potential future improvements include:
+
+- IoT sensor integration for physical smart bins.
+- Automated bin-fill-level monitoring.
+- Real-time bin status updates.
+- Expanded waste classification capabilities.
+- Improved image classification accuracy.
+- Location-aware recycling recommendations.
+- More detailed environmental impact analytics.
+- Additional reward and redemption integrations.
+- Integration with municipal waste management systems.
+
+---
+
+## 🎯 Project Objective
+
+SmartBin aims to make responsible waste disposal easier, smarter, and more rewarding.
+
+By combining AI-powered waste classification, QR-based smart-bin interactions, interactive location discovery, and a digital rewards system, the platform encourages users to participate in sustainable waste management.
+
+The long-term vision is to promote cleaner communities through accessible technology, environmental awareness, and incentives for responsible recycling.
+
+---
+
+## 📄 License
+
+No formal open-source license has been declared for this project.
+
+Until a license is added, reuse and redistribution remain subject to applicable copyright law.

@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2 } from 'lucide-react'; // Make sure you have this imported
 import axios from 'axios';
+import API_BASE_URL from './api';
 
 // --- FIX ICONS (Native Leaflet requires manual icon setup) ---
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -33,7 +34,7 @@ export default function SmartBinMap() {
 
             try {
                 // 1. FETCH REAL-TIME DATA FROM YOUR LIVE RENDER SERVER
-                const res = await axios.get('https://smartbin-api-c7g4.onrender.com/api/bins');
+                const res = await axios.get(`${API_BASE_URL}/api/bins`);
                 if (res.data.status === 'ok') {
                     activeBins = res.data.bins;
                 }

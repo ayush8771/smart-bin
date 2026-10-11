@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from './api';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, ArrowLeft } from 'lucide-react';
 
@@ -386,7 +387,7 @@ function Auth({ initialPanel = 'login' }) {
     e.preventDefault();
     setLoginLoading(true);
     try {
-      const res = await axios.post('https://smartbin-api-c7g4.onrender.com/api/login', {
+      const res = await axios.post(`${API_BASE_URL}/api/login`, {
         email: loginEmail,
         password: loginPassword,
       });
@@ -409,7 +410,7 @@ function Auth({ initialPanel = 'login' }) {
     e.preventDefault();
     setRegLoading(true);
     try {
-      const res = await axios.post('https://smartbin-api-c7g4.onrender.com/api/register', {
+      const res = await axios.post(`${API_BASE_URL}/api/register`, {
         name: regName,
         email: regEmail,
         password: regPassword,

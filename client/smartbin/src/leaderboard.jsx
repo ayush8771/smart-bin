@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_BASE_URL from './api';
 import { useNavigate } from 'react-router-dom';
 import { Trophy, Medal, Award, ArrowLeft, Loader2, Crown } from 'lucide-react';
 
@@ -12,7 +13,7 @@ export default function Leaderboard() {
         const fetchLeaderboard = async () => {
             try {
                 // Make sure this points to your live Render URL!
-                const res = await axios.get('https://smartbin-api-c7g4.onrender.com/api/leaderboard');
+                const res = await axios.get(`${API_BASE_URL}/api/leaderboard`);
                 if (res.data.status === 'ok') {
                     setLeaders(res.data.leaderboard);
                 }

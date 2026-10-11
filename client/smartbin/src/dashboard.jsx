@@ -1,64 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from './api';
 import { useNavigate } from 'react-router-dom';
-import { Wallet, Leaf, Trash2, LogOut, History, Ticket, Bus, Train, CreditCard, Trophy, RefreshCw, MapPin } from 'lucide-react';
+import { Wallet, Leaf, Trash2, LogOut, History, Ticket, Bus, Train, Trophy, MapPin } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+
+const WASTE_TYPES = [
+  { name: 'Plastic',           color: '#F59E0B', emoji: '🧴' },
+  { name: 'Metal',             color: '#94A3B8', emoji: '🔩' },
+  { name: 'Paper / Cardboard', color: '#92400E', emoji: '📦' },
+  { name: 'Organic',           color: '#16A34A', emoji: '🌿' },
+  { name: 'Glass',             color: '#0891B2', emoji: '🫙' },
+  { name: 'Other Trash',       color: '#DC2626', emoji: '🗑️' },
+];
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  // Refresh function to reload data after redemption
   const fetchUserData = () => {
     const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-    axios.get('https://smartbin-api-c7g4.onrender.com/api/dashboard', { headers: { 'x-access-token': token } })
+    if (!token) { navigate('/login'); return; }
+    axios.get(`${API_BASE_URL}/api/dashboard`, { headers: { 'x-access-token': token } })
       .then(res => {
-        if (res.data.status === 'ok') {
-          setUser(res.data.user);
-        } else {
-          localStorage.removeItem('token');
-          navigate('/login');
-        }
+        if (res.data.status === 'ok') setUser(res.data.user);
+        else { localStorage.removeItem('token'); navigate('/login'); }
       })
-      .catch(err => {
-        console.error("Dashboard fetch error", err);
-        localStorage.removeItem('token');
-        navigate('/login');
-      });
+      .catch(() => { localStorage.removeItem('token'); navigate('/login'); });
   };
 
   useEffect(() => { fetchUserData(); }, []);
 
   if (!user) return <div className="flex h-screen items-center justify-center font-bold text-xl">Loading Dashboard...</div>;
 
-  // --- REDEMPTION LOGIC ---
   const handleRedeem = async (item, cost, type) => {
     if (!window.confirm(`Are you sure you want to redeem ${item} for ${cost} ${type === 'money' ? 'Rupees' : 'Points'}?`)) return;
-
-    // UPDATED URL TO NEW BACKEND
-    const res = await axios.post('https://smartbin-api-c7g4.onrender.com/api/redeem', { item, cost, type }, {
+    const res = await axios.post(`${API_BASE_URL}/api/redeem`, { item, cost, type }, {
       headers: { 'x-access-token': localStorage.getItem('token') }
     });
-
-    if (res.data.status === 'ok') {
-      alert(`Success! You redeemed: ${item}`);
-      fetchUserData(); // Update balance instantly
-    } else {
-      alert(`Failed: ${res.data.message}`);
-    }
+    if (res.data.status === 'ok') { alert(`Success! You redeemed: ${item}`); fetchUserData(); }
+    else alert(`Failed: ${res.data.message}`);
   };
 
-  // --- MERGE LOGS & REDEMPTIONS FOR WALLET HISTORY ---
-  const transactions = [
-    ...(user.logs || []).map(l => ({ ...l, type: 'credit', desc: `Recycled ${l.wasteType}` })),
-    ...(user.redemptions || []).map(r => ({ ...r, type: 'debit', amount: r.cost, desc: r.item }))
-  ].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  // --- CHART DATA PREP ---
   const processEarningsData = () => {
     if (!user.logs) return [];
     const last7Days = [];
@@ -73,37 +56,36 @@ export default function Dashboard() {
     return last7Days;
   };
 
-  const pieData = [
-    { name: 'Plastic', value: user.logs?.filter(l => l.wasteType === 'Plastic').length || 0 },
-    { name: 'Non - Plastic', value: user.logs?.filter(l => l.wasteType !== 'Plastic').length || 0 },
-  ];
-  if (pieData[0].value === 0 && pieData[1].value === 0) pieData[0].value = 1;
+  // Pie chart — 6 waste types
+  const pieData = WASTE_TYPES.map(w => ({
+    name: w.name,
+    value: user.logs?.filter(l => l.wasteType === w.name).length || 0,
+  }));
+  if (pieData.every(d => d.value === 0)) pieData[0].value = 1;
+  const COLORS = WASTE_TYPES.map(w => w.color);
 
-  const COLORS = ['#22c55e', '#64748b'];
+  // Waste colour lookup for activity log badges
+  const wasteColorMap = Object.fromEntries(WASTE_TYPES.map(w => [w.name, w.color]));
+  const wasteEmojiMap = Object.fromEntries(WASTE_TYPES.map(w => [w.name, w.emoji]));
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
 
-      {/* HEADER SECTION */}
+      {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 bg-white p-6 rounded-2xl shadow-sm gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-800">Hello, {user.name}!</h1>
           <p className="text-gray-500">Your Impact & Rewards Dashboard</p>
         </div>
-
-        {/* NEW BUTTON CONTAINER */}
         <div className="flex items-center gap-3 w-full md:w-auto">
-          {/* LEADERBOARD BUTTON */}
           <button
             onClick={() => navigate('/leaderboard')}
             className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-yellow-50 text-yellow-600 px-5 py-3 rounded-xl font-bold hover:bg-yellow-100 transition border border-yellow-200"
           >
             <Trophy size={20} /> <span className="hidden sm:inline">Leaderboard</span>
           </button>
-
-          {/* LOGOUT BUTTON */}
           <button
-            onClick={() => { localStorage.removeItem('token'); navigate('/') }}
+            onClick={() => { localStorage.removeItem('token'); navigate('/'); }}
             className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-red-50 text-red-600 px-5 py-3 rounded-xl font-bold hover:bg-red-100 transition"
           >
             <LogOut size={20} /> <span className="hidden sm:inline">Logout</span>
@@ -111,7 +93,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* MAIN STATS */}
+      {/* STATS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
           <div>
@@ -142,7 +124,7 @@ export default function Dashboard() {
         🗺️ Find Nearby Bins
       </button>
 
-      {/* CHARTS ROW */}
+      {/* CHARTS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-80">
           <h3 className="text-lg font-bold mb-4 text-gray-700">Earnings Trend</h3>
@@ -156,17 +138,50 @@ export default function Dashboard() {
             </LineChart>
           </ResponsiveContainer>
         </div>
+
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-80">
           <h3 className="text-lg font-bold mb-4 text-gray-700">Waste Distribution</h3>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <Pie data={pieData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
-                {pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+              <Pie data={pieData} cx="50%" cy="50%" innerRadius={55} outerRadius={75} paddingAngle={3} dataKey="value">
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
               </Pie>
-              <Tooltip />
-              <Legend verticalAlign="bottom" />
+              <Tooltip formatter={(value, name) => [value, name]} />
+              <Legend verticalAlign="bottom" iconType="circle" iconSize={10} />
             </PieChart>
           </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* WASTE TYPE LEGEND CARDS */}
+      <div className="mb-10">
+        <h3 className="text-lg font-bold mb-4 text-gray-700">Waste & Reward Guide</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {WASTE_TYPES.map(w => (
+            <div key={w.name} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex items-center gap-3">
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center text-xl flex-shrink-0"
+                style={{ background: `${w.color}18`, border: `1px solid ${w.color}44` }}
+              >
+                {w.emoji}
+              </div>
+              <div>
+                <p className="font-semibold text-gray-800 text-sm leading-tight">{w.name}</p>
+                <p className="text-xs font-bold mt-0.5" style={{ color: w.color }}>
+                  {{
+                    'Plastic': '+₹25',
+                    'Metal': '+₹30',
+                    'Paper / Cardboard': '+₹10',
+                    'Organic': '+₹5',
+                    'Glass': '+₹15',
+                    'Other Trash': '+₹8',
+                  }[w.name]} per item
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -185,7 +200,6 @@ export default function Dashboard() {
               <button onClick={() => handleRedeem("Movie Voucher", 500, 'points')} className="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-700">Redeem</button>
             </div>
           </div>
-
           <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition">
             <div className="bg-yellow-100 w-12 h-12 rounded-full flex items-center justify-center mb-4"><Bus className="text-yellow-600" /></div>
             <h4 className="text-xl font-bold">Bus Pass</h4>
@@ -195,7 +209,6 @@ export default function Dashboard() {
               <button onClick={() => handleRedeem("Bus Pass", 200, 'points')} className="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-700">Redeem</button>
             </div>
           </div>
-
           <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition">
             <div className="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mb-4"><Train className="text-indigo-600" /></div>
             <h4 className="text-xl font-bold">Metro Recharge</h4>
@@ -208,27 +221,39 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* RECENT ACTIVITY LOGS */}
+      {/* RECENT ACTIVITY */}
       <div className="mt-8">
         <h3 className="text-xl font-bold mb-4 text-gray-700 flex items-center gap-2"><History /> Recent Activity</h3>
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {user.logs && user.logs.length > 0 ? (
-            user.logs.slice().reverse().slice(0, 5).map((log, i) => (
-              <div key={i} className="p-4 border-b last:border-0 flex justify-between items-center hover:bg-gray-50">
-                <div>
-                  <p className="font-bold text-gray-800">{log.wasteType}</p>
-                  <p className="text-xs text-gray-500">{new Date(log.date).toLocaleDateString()} at {new Date(log.date).toLocaleTimeString()}</p>
-                </div>
-                <div>
-                  <div className="hidden sm:block">
-                    <p className="text-emerald-600 text-xs font-bold flex items-center gap-1 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-200">
-                      <MapPin size={12} /> {log.location ? log.location : "Unknown Location"}
-                    </p>
+            user.logs.slice().reverse().slice(0, 5).map((log, i) => {
+              const wColor = wasteColorMap[log.wasteType] || '#6B7280';
+              const wEmoji = wasteEmojiMap[log.wasteType] || '♻️';
+              return (
+                <div key={i} className="p-4 border-b last:border-0 flex justify-between items-center hover:bg-gray-50">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-9 h-9 rounded-lg flex items-center justify-center text-lg flex-shrink-0"
+                      style={{ background: `${wColor}18`, border: `1px solid ${wColor}44` }}
+                    >
+                      {wEmoji}
+                    </div>
+                    <div>
+                      <p className="font-bold text-gray-800" style={{ color: wColor }}>{log.wasteType}</p>
+                      <p className="text-xs text-gray-500">{new Date(log.date).toLocaleDateString()} at {new Date(log.date).toLocaleTimeString()}</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className="text-green-600 font-bold">+₹{log.amount}</span>
+                    <div className="hidden sm:block">
+                      <p className="text-emerald-600 text-xs font-bold flex items-center gap-1 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-200">
+                        <MapPin size={12} /> {log.location || "Unknown Location"}
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <span className="text-green-600 font-bold">+₹{log.amount}</span>
-              </div>
-            ))
+              );
+            })
           ) : (
             <div className="p-6 text-center text-gray-400">No activity yet. Scan some items to see data!</div>
           )}

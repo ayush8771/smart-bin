@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from './api';
 import { useNavigate } from 'react-router-dom';
 import { Users, Search, Wallet, Leaf, ArrowUpRight, Download, LogOut, ShieldCheck } from 'lucide-react';
 
@@ -15,7 +16,7 @@ export default function Admin() {
 
     const fetchUsers = async () => {
         try {
-            const res = await axios.get('https://smartbin-api-c7g4.onrender.com/api/admin/users');
+            const res = await axios.get(`${API_BASE_URL}/api/admin/users`);
             const data = res.data.users;
             setUsers(data);
 

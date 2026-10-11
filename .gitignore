@@ -1,0 +1,56 @@
+# Ignore compiled Python files
+*.pyc
+__pycache__/
+
+# Ignore temporary files
+*.tmp
+temp/
+
+# Ignore log files
+*.log
+logs/
+
+# Ignore build artifacts
+build/
+dist/
+temp_folder/
+node_modules/
+
+# Ignore sensitive or local configuration files
+.env
+config.local.js
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Exclude a specific file from being ignored, even if it matches a pattern
+!important_file.log
+
+# Ignore all files in a directory except a specific one
+my_data/*
+!my_data/keep_this.txt
+build/output.txt
+*.log
+!important.log
+
+node_modules
+server/serviceAccountKey.json
+.env
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+
+# Build output
+dist/
+build/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
